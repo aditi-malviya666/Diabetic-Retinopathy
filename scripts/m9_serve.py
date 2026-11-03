@@ -11,6 +11,7 @@ reports/m6_<preset>/m6_results.json (triage), checkpoints/m5_<preset>/final.pt
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -19,10 +20,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 def main() -> None:
     root = Path(__file__).resolve().parents[1]
+    default_host = os.environ.get("HOST", "0.0.0.0" if ("PORT" in os.environ or "SPACE_ID" in os.environ) else "127.0.0.1")
+    default_port = int(os.environ.get("PORT", 7860 if "SPACE_ID" in os.environ else 8000))
+    
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--project", default=str(root))
-    ap.add_argument("--host", default="127.0.0.1")
-    ap.add_argument("--port", type=int, default=8000)
+    ap.add_argument("--host", default=default_host)
+    ap.add_argument("--port", type=int, default=default_port)
     ap.add_argument("--triage-preset", default="full", choices=["full", "quick"])
     ap.add_argument("--seg-preset", default="full", choices=["full", "quick"])
     ap.add_argument("--mc-samples", type=int, default=50)

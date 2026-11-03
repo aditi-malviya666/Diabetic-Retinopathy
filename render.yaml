@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: dr-pinn-retinal-triage
+    runtime: python
+    buildCommand: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu && pip install -r requirements.txt
+    startCommand: python scripts/m9_serve.py --project .
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: HOST
+        value: 0.0.0.0
